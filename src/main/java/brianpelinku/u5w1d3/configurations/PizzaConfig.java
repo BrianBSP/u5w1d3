@@ -16,33 +16,32 @@ import java.util.List;
 public class PizzaConfig {
 
     // toppings
-    @Bean
+    @Bean(name = "topping_pomodoro")
     public Topping pomodoto() {
         return new Topping("Pomodoro", 100, 0);
     }
 
-    @Bean
+    @Bean(name = "topping_mozzarella")
     public Topping mozzarella() {
         return new Topping("Mozzarella", 100, 0);
     }
 
-    @Bean
+    @Bean(name = "topping_salsiccia")
     public Topping salsiccia() {
         return new Topping("salsiccia", 100, 2.5);
     }
 
-    @Bean
+    @Bean(name = "topping_salame_piccante")
     public Topping salamePiccante() {
         return new Topping("Salame piccante", 100, 2);
     }
 
-    @Bean
+    @Bean(name = "topping_mozzarella_bufala")
     public Topping mozzarellaBufala() {
         return new Topping("Mozzarella di bufala", 100, 3.5);
-
     }
 
-    @Bean
+    @Bean(name = "topping_prosciutto_crudo")
     public Topping prosciuttoCrudo() {
         return new Topping("Prosciutto crudo", 100, 2.5);
     }

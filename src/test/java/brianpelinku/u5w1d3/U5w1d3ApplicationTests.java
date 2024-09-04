@@ -8,6 +8,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,8 +17,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 class U5w1d3ApplicationTests {
+	private static AnnotationConfigApplicationContext context;
 
-	@BeforeEach
+
+
+	/*@BeforeEach
 	void beforeEach(){
 		System.out.println("BEFORE EACH");
 	}
@@ -25,11 +29,12 @@ class U5w1d3ApplicationTests {
 	@AfterEach
 	void afterEach(){
 		System.out.println("BEFORE EACH");
-	}
+	}*/
 
 	@BeforeAll
     static void beforeAll(){
 		System.out.println("BEFORE ALL");
+		context = new AnnotationConfigApplicationContext(U5w1d3Application.class);
 	}
 
 	@AfterAll
@@ -37,34 +42,28 @@ class U5w1d3ApplicationTests {
 		System.out.println("AFTER ALL");
 	}
 
-	// verifica creazione pizza
+	// verifica creazione pizza margherita
 	@Test
-	void testCreazionePizza(){
-		Topping mozzarella = new Topping("mozzarella", 200, 2);
-		Topping pomodoro = new Topping("pomodoro", 200, 1.5);
-
-		Pizza pizza = new Pizza("Pizza Margherita", Arrays.asList(mozzarella, pomodoro));
-
-		assertEquals("Pizza Margherita", pizza.getNome());
-		assertEquals(1600, pizza.getKcal());
-		assertEquals(8, pizza.getPrezzo());
+	void testPizzaMargherita(){
+		Pizza pizzaMargherita = (Pizza) context.getBean("pizza_margherita");
+		assertEquals("Pizza Margherita", pizzaMargherita.getNome());
 	}
 
 	// verifica creazione tavolo
 	@Test
 	void testCreaTavolo(){
-		Tavolo tavolo1 = new Tavolo(1, 10, StatoTavolo.LIBERO, 2);
+		Tavolo tavolo1 = (Tavolo) context.getBean("tavolo1");
 
 		assertEquals(1, tavolo1.getNumTavolo());
 		assertEquals(10, tavolo1.getMaxCoperti());
 		assertEquals(StatoTavolo.LIBERO, tavolo1.getStatoTavolo());
-		assertEquals(2, tavolo1.getCostoCoperto());
+		assertEquals(2.5, tavolo1.getCostoCoperto());
 	}
 
 	// verifica cambio stato tavolo
 	@Test
 	void testCambioStatoTavolo(){
-		Tavolo tavolo = new Tavolo(2,5,StatoTavolo.LIBERO,2.5);
+		Tavolo tavolo = (Tavolo) context.getBean("tavolo1");
 
 		assertEquals(StatoTavolo.LIBERO, tavolo.getStatoTavolo());
 
@@ -74,23 +73,19 @@ class U5w1d3ApplicationTests {
 
 	// verifica calcolo kcal pizza
 	@ParameterizedTest
-	@CsvSource({"mozzarella,pomodoro,1600"})
-	void testCalcoloKcal(String topping1, String topping2, int kCal){
-		Topping t1 = new Topping(topping1, 200,2);
-		Topping t2 = new Topping(topping2, 200, 3);
+	@CsvSource({"pizza_margherita,1400"})
+	void testCalcoloKcal(String pizzaMargherita, int kCal){
 
-		Pizza pizza =new Pizza("Pizza Test", Arrays.asList(t1,t2));
+		Pizza pizza= (Pizza) context.getBean(pizzaMargherita);
 		assertEquals(kCal, pizza.getKcal());
 	}
 
 	// verifica calcolo prezzo pizza
 	@ParameterizedTest
-	@CsvSource({"mozzarella,pomodoro,8"})
-	void testCalcoloPrezzo(String topping1, String topping2, double prezzo){
-		Topping t1 = new Topping(topping1, 200,2);
-		Topping t2 = new Topping(topping2, 200, 1.5);
+	@CsvSource({"pizza_bufalotta,10.5"})
+	void testCalcoloPrezzo(String pizzaBufalotta, double prezzo){
 
-		Pizza pizza =new Pizza("Pizza Test", Arrays.asList(t1,t2));
+		Pizza pizza = (Pizza) context.getBean(pizzaBufalotta);
 		assertEquals(prezzo, pizza.getPrezzo());
 	}
 
